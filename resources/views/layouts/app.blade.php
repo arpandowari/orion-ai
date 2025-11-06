@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'ORION AI - Learn & Grow')</title>
+    <link rel="icon" type="image/png" href="{{ asset('storage/logo/orion-logo.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('storage/logo/orion-logo.png') }}">
     <style>
         * {
             margin: 0;
