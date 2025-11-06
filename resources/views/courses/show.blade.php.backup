@@ -1,0 +1,286 @@
+@extends('layouts.app')
+
+@section('title', $course->name . ' - ORION AI')
+
+@section('styles')
+<style>
+    .course-header {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+    }
+
+    .course-header h1 {
+        margin-bottom: 0.5rem;
+    }
+
+    .course-layout {
+        display: grid;
+        grid-template-columns: 1fr 350px;
+        gap: 2rem;
+    }
+
+    .video-section {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .video-player {
+        width: 100%;
+        aspect-ratio: 16/9;
+        background: #000;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+
+    .video-info h2 {
+        color: var(--primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .video-info p {
+        color: #64748b;
+    }
+
+    .playlist {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .playlist h3 {
+        color: var(--primary);
+        margin-bottom: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .completion-badge {
+        background: var(--success);
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.875rem;
+    }
+
+    .video-item {
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        border: 2px solid transparent;
+    }
+
+    .video-item:hover {
+        background: var(--light);
+    }
+
+    .video-item.active {
+        background: var(--light);
+        border-color: var(--secondary);
+    }
+
+    .video-item.locked {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .video-item.locked:hover {
+        background: white;
+    }
+
+    .video-icon {
+        font-size: 1.5rem;
+        min-width: 30px;
+        text-align: center;
+    }
+
+    .video-icon.free {
+        color: var(--success);
+    }
+
+    .video-icon.locked {
+        color: #94a3b8;
+    }
+
+    .video-icon.completed {
+        color: var(--success);
+    }
+
+    .video-details {
+        flex: 1;
+    }
+
+    .video-title {
+        font-weight: 600;
+        color: var(--dark);
+        margin-bottom: 0.25rem;
+    }
+
+    .video-duration {
+        font-size: 0.875rem;
+        color: #64748b;
+    }
+
+    .locked-message {
+        background: #fef3c7;
+        border-left: 4px solid #f59e0b;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+    }
+
+    .locked-message h4 {
+        color: #92400e;
+        margin-bottom: 0.5rem;
+    }
+
+    .locked-message p {
+        color: #78350f;
+        margin-bottom: 1rem;
+    }
+
+    .mark-complete-btn {
+        margin-top: 1rem;
+        width: 100%;
+    }
+
+    @media (max-width: 768px) {
+        .course-layout {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+@endsection
+
+@section('content')
+<div class="container">
+    <div class="course-header">
+        <h1>{{ $course->name }}</h1>
+        <p>{{ $course->description }}</p>
+    </div>
+
+    <div class="course-layout">
+        <div class="video-section">
+            @if($currentVideo)
+                @if($currentVideo->is_free || $hasAccess)
+                    @if($currentVideo->video_path)
+                        <video class="video-player" controls>
+                            <source src="{{ asset('storage/' . $currentVideo->video_path) }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    @else
+                        <div class="video-player" style="display: flex; align-items: center; justify-content: center; color: white;">
+                            <div style="text-align: center;">
+                                <h3>Video not available</h3>
+                            </div>
+                        </div>
+                    @endif
+                    
+                    <div class="video-info">
+                        <h2>{{ $currentVideo->title }}</h2>
+                        <p>{{ $currentVideo->description }}</p>
+                    </div>
+
+                    @auth
+                        @if(!$isCompleted)
+                            <form method="POST" action="{{ route('video.complete', $currentVideo->id) }}">
+                                @csrf
+                                <button type="submit" class="btn btn-primary mark-complete-btn">
+                                    Mark as Completed
+                                </button>
+                            </form>
+                        @else
+                            <div style="text-align: center; padding: 1rem; background: var(--light); border-radius: 8px; color: var(--success); font-weight: 600;">
+                                Completed
+                            </div>
+                        @endif
+                    @endauth
+                @else
+                    <div class="video-player" style="display: flex; align-items: center; justify-content: center; color: white;">
+                        <div style="text-align: center;">
+                            <h3>This video is locked</h3>
+                        </div>
+                    </div>
+
+                    <div class="locked-message">
+                        <h4>Premium Content</h4>
+                        <p>This video is part of our premium content. Register for this course to unlock all videos.</p>
+                        <a href="{{ route('registration.create', $course->id) }}" class="btn btn-primary" style="width: 100%;">
+                            Enroll Now to Unlock
+                        </a>
+                    </div>
+                @endif
+            @else
+                <div class="video-player" style="display: flex; align-items: center; justify-content: center; color: white;">
+                    <div style="text-align: center;">
+                        <h3>Select a video to start</h3>
+                    </div>
+                </div>
+            @endif
+        </div>
+
+        <div class="playlist">
+            <h3>
+                Course Content
+                @if($courseCompleted)
+                    <span class="completion-badge">Completed</span>
+                @endif
+            </h3>
+
+            @foreach($course->videos as $video)
+                <div class="video-item {{ $currentVideo && $currentVideo->id == $video->id ? 'active' : '' }} {{ !$video->is_free && !$hasAccess ? 'locked' : '' }}"
+                     onclick="{{ $video->is_free || $hasAccess ? 'window.location.href=\'' . route('courses.show', ['id' => $course->id, 'video' => $video->id]) . '\'' : 'return false;' }}">
+                    
+                    <div class="video-icon {{ $video->is_free ? 'free' : ($hasAccess ? '' : 'locked') }} {{ isset($completedVideos[$video->id]) ? 'completed' : '' }}">
+                        @if(isset($completedVideos[$video->id]))
+                            &#10003;
+                        @elseif($video->is_free)
+                            &#9654;
+                        @elseif($hasAccess)
+                            &#9654;
+                        @else
+                            &#128274;
+                        @endif
+                    </div>
+
+                    <div class="video-details">
+                        <div class="video-title">
+                            {{ $video->title }}
+                            @if($video->is_free)
+                                <span style="color: var(--success); font-size: 0.75rem; font-weight: 600;">(FREE)</span>
+                            @endif
+                        </div>
+                        <div class="video-duration">
+                            @if($video->is_free || $hasAccess)
+                                Lesson {{ $video->order }}
+                            @else
+                                Locked - Enroll to access
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+
+            @if(!$hasAccess)
+                <div style="margin-top: 1.5rem; padding: 1rem; background: var(--light); border-radius: 8px; text-align: center;">
+                    <p style="color: #64748b; margin-bottom: 1rem;">Unlock all {{ $course->videos->count() }} videos</p>
+                    <a href="{{ route('registration.create', $course->id) }}" class="btn btn-primary" style="width: 100%;">
+                        Enroll in Course
+                    </a>
+                </div>
+            @endif
+        </div>
+    </div>
+</div>
+@endsection

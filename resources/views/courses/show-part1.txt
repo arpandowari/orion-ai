@@ -1,0 +1,64 @@
+﻿@extends('layouts.app')
+
+@section('title', $course->name . ' - ORION AI')
+
+@section('styles')
+<style>
+    .course-header {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+    }
+    .course-header h1 { margin-bottom: 0.5rem; }
+    .course-layout { display: grid; grid-template-columns: 1fr 350px; gap: 2rem; }
+    .video-section { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .custom-video-container { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 8px; margin-bottom: 1rem; overflow: hidden; user-select: none; }
+    .custom-video-container video { width: 100%; height: 100%; display: block; }
+    .custom-video-container video::-webkit-media-controls { display: none !important; }
+    .video-controls { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%); padding: 1rem; opacity: 0; transition: opacity 0.3s; }
+    .custom-video-container:hover .video-controls, .video-controls.show { opacity: 1; }
+    .progress-bar-container { width: 100%; height: 6px; background: rgba(255,255,255,0.3); border-radius: 3px; cursor: pointer; margin-bottom: 0.75rem; position: relative; }
+    .progress-bar { height: 100%; background: var(--secondary); border-radius: 3px; width: 0%; transition: width 0.1s; }
+    .progress-buffer { position: absolute; height: 100%; background: rgba(255,255,255,0.5); border-radius: 3px; width: 0%; }
+    .controls-row { display: flex; align-items: center; gap: 1rem; }
+    .control-btn { background: none; border: none; color: white; font-size: 1.25rem; cursor: pointer; padding: 0.25rem; transition: transform 0.2s; }
+    .control-btn:hover { transform: scale(1.1); }
+    .time-display { color: white; font-size: 0.875rem; font-weight: 500; }
+    .volume-control { display: flex; align-items: center; gap: 0.5rem; }
+    .volume-slider { width: 80px; height: 4px; -webkit-appearance: none; background: rgba(255,255,255,0.3); border-radius: 2px; outline: none; }
+    .volume-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; background: white; border-radius: 50%; cursor: pointer; }
+    .playback-speed { color: white; background: rgba(255,255,255,0.2); border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.875rem; cursor: pointer; }
+    .spacer { flex: 1; }
+    .center-play-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80px; height: 80px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; opacity: 0; }
+    .center-play-btn.show { opacity: 1; }
+    .center-play-btn:hover { background: white; transform: translate(-50%, -50%) scale(1.1); }
+    .center-play-btn svg { width: 40px; height: 40px; fill: var(--primary); margin-left: 5px; }
+    .video-loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; border: 4px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite; display: none; }
+    .video-loading.show { display: block; }
+    @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+    .video-info h2 { color: var(--primary); margin-bottom: 0.5rem; }
+    .video-info p { color: #64748b; }
+    .playlist { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .playlist h3 { color: var(--primary); margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; }
+    .completion-badge { background: var(--success); color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.875rem; }
+    .video-item { padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 0.75rem; border: 2px solid transparent; }
+    .video-item:hover { background: var(--light); }
+    .video-item.active { background: var(--light); border-color: var(--secondary); }
+    .video-item.locked { opacity: 0.6; cursor: not-allowed; }
+    .video-item.locked:hover { background: white; }
+    .video-icon { font-size: 1.5rem; min-width: 30px; text-align: center; }
+    .video-icon.free { color: var(--success); }
+    .video-icon.locked { color: #94a3b8; }
+    .video-icon.completed { color: var(--success); }
+    .video-details { flex: 1; }
+    .video-title { font-weight: 600; color: var(--dark); margin-bottom: 0.25rem; }
+    .video-duration { font-size: 0.875rem; color: #64748b; }
+    .locked-message { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 1rem; border-radius: 8px; margin-top: 1rem; }
+    .locked-message h4 { color: #92400e; margin-bottom: 0.5rem; }
+    .locked-message p { color: #78350f; margin-bottom: 1rem; }
+    .mark-complete-btn { margin-top: 1rem; width: 100%; }
+    @media (max-width: 768px) { .course-layout { grid-template-columns: 1fr; } }
+</style>
+@endsection
