@@ -1,6 +1,5 @@
-FROM php:8.2-apache
+FROM php:8.2-cli
 
-# Set working directory
 WORKDIR /var/www/html
 
 # Install system dependencies
@@ -16,51 +15,58 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Enable Apache modules
-RUN a2enmod rewrite
-
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copy composer files first
+# Copy composer files
 COPY composer.json composer.lock ./
 
-# Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+# Install dependencies
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Copy application files
+# Copy application
 COPY . .
 
-# Run composer scripts
-RUN composer dump-autoload --optimize
-
-# Create storage directories and set permissions
-RUN mkdir -p storage/framework/sessions \
-    storage/framework/views \
-    storage/framework/cache \
+# Set permissions
+RUN mkdir -p storage/framework/{sessions,views,cache} \
     storage/logs \
     storage/app/public \
     bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache \
-    && chown -R www-data:www-data storage bootstrap/cache
+    && chmod -R 775 storage bootstrap/cache
 
-# Configure Apache
-RUN echo '<VirtualHost *:80>\n\
-    DocumentRoot /var/www/html/public\n\
-    <Directory /var/www/html/public>\n\
-        AllowOverride All\n\
-        Require all granted\n\
-    </Directory>\n\
-    ErrorLog ${APACHE_LOG_DIR}/error.log\n\
-    CustomLog ${APACHE_LOG_DIR}/access.log combined\n\
-</VirtualHost>' > /etc/apache2/sites-available/000-default.conf
+# Create entrypoint script
+RUN echo '#!/bin/bash\n\
+set -e\n\
+\n\
+# Set defaults\n\
+export PORT=${PORT:-8080}\n\
+export APP_ENV=${APP_ENV:-production}\n\
+export APP_DEBUG=${APP_DEBUG:-false}\n\
+\n\
+# Parse DATABASE_URL\n\
+if [ ! -z "$DATABASE_URL" ]; then\n\
+    export DB_CONNECTION=mysql\n\
+    export DB_HOST=$(echo $DATABASE_URL | sed "s/.*@\\([^:]*\\):.*/\\1/")\n\
+    export DB_PORT=$(echo $DATABASE_URL | sed "s/.*:\\([0-9]*\\)\\/.*/\\1/")\n\
+    export DB_DATABASE=$(echo $DATABASE_URL | sed "s/.*\\/\\(.*\\)/\\1/")\n\
+    export DB_USERNAME=$(echo $DATABASE_URL | sed "s/.*:\\/\\/\\([^:]*\\):.*/\\1/")\n\
+    export DB_PASSWORD=$(echo $DATABASE_URL | sed "s/.*:\\/\\/[^:]*:\\([^@]*\\)@.*/\\1/")\n\
+fi\n\
+\n\
+# Clear caches\n\
+php artisan config:clear || true\n\
+php artisan cache:clear || true\n\
+\n\
+# Create storage link\n\
+php artisan storage:link || true\n\
+\n\
+# Run migrations\n\
+php artisan migrate --force || echo "Migration failed"\n\
+\n\
+# Start server\n\
+php artisan serve --host=0.0.0.0 --port=$PORT\n\
+' > /usr/local/bin/start.sh && chmod +x /usr/local/bin/start.sh
 
-# Copy startup script
-COPY startup.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/startup.sh
+EXPOSE 8080
 
-# Expose port 80
-EXPOSE 80
-
-# Start command
-CMD ["/usr/local/bin/startup.sh"]
+CMD ["/usr/local/bin/start.sh"]
