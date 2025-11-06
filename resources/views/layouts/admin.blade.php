@@ -427,7 +427,10 @@
     <div class="toast-container" id="toastContainer"></div>
     <nav class="navbar">
         <div class="nav-container">
-            <a href="{{ route('admin.dashboard') }}" class="logo">ORION AI - Admin</a>
+            <a href="{{ route('admin.dashboard') }}" class="logo">
+                <img src="{{ asset('storage/logo/orion-logo.png') }}" alt="ORION AI" style="height: 35px; width: auto; margin-right: 8px; vertical-align: middle;">
+                ORION AI - Admin
+            </a>
             <ul class="nav-menu">
                 <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
                 <li><a href="{{ route('admin.analytics') }}">Analytics</a></li>

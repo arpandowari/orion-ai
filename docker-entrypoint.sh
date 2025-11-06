@@ -17,6 +17,16 @@ fi
 php artisan config:clear
 php artisan cache:clear
 
+# Create storage link (ignore if exists)
+php artisan storage:link || true
+
+# Ensure logo directory exists
+mkdir -p storage/app/public/logo
+
+# Set proper permissions
+chmod -R 775 storage
+chmod -R 775 bootstrap/cache
+
 # Run migrations
 php artisan migrate --force
 
