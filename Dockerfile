@@ -28,6 +28,10 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-script
 # Copy application files
 COPY . .
 
+# Copy entrypoint script
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 # Run composer scripts
 RUN composer dump-autoload --optimize
 
@@ -43,7 +47,4 @@ RUN mkdir -p storage/framework/sessions \
 EXPOSE ${PORT:-8080}
 
 # Start command
-CMD php artisan config:clear && \
-    php artisan cache:clear && \
-    php artisan migrate --force && \
-    php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
+ENTRYPOINT ["docker-entrypoint.sh"]
