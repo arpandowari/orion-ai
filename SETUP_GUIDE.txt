@@ -1,0 +1,95 @@
+ORION AI - Quick Setup Guide
+=============================
+
+STEP 1: Ensure MySQL is Running
+- Start XAMPP Control Panel
+- Start Apache and MySQL services
+
+STEP 2: Database is Already Created
+- Database name: OrionLearn
+- Already migrated and seeded with sample data
+
+STEP 3: Start the Application
+Run this command in the orion-ai directory:
+    php artisan serve
+
+STEP 4: Access the Website
+- Main Website: http://localhost:8000
+- Admin Login: http://localhost:8000/login
+
+STEP 5: Admin Credentials
+Email: admin@orionai.com
+Password: admin123
+
+FEATURES TO TEST:
+=================
+
+1. HOME PAGE
+   - View featured courses
+   - See partner companies
+   - Click "Join Now" button
+
+2. COURSES PAGE
+   - Browse all 8 courses
+   - Click "Explore" to view syllabus
+   - Click "Enroll Now" to register
+
+3. PLACEMENT SERIES
+   - View placement preparation details
+   - Click "Explore Syllabus"
+   - Click "Enroll Now" and fill form
+
+4. REGISTRATION FORM
+   - Fill all required fields
+   - Upload resume (PDF/DOCX, max 10MB)
+   - Upload marksheet (PDF/DOCX, max 10MB)
+   - Submit registration
+
+5. ADMIN DASHBOARD
+   - Login with admin credentials
+   - View all registrations
+   - Click "View Details" to see full info
+   - Download resume/marksheet
+   - Update status (Pending/Contacted/Verified)
+   - Unlock course for students
+
+AVAILABLE COURSES:
+==================
+1. Data Science
+2. Machine Learning
+3. Web Development
+4. App Development
+5. Virtual & Augmented Reality
+6. Power BI and Business Intelligence
+7. MySQL
+8. Excel
+
+Each course has:
+- 1 FREE preview video
+- 4 LOCKED premium videos
+- Detailed syllabus
+- Professional description
+
+COLOR THEME:
+============
+Primary Blue: #1e3a8a
+Secondary Blue: #3b82f6
+Accent Blue: #60a5fa
+Success Green: #10b981
+
+NOTES:
+======
+- Email notifications are set to 'log' mode (check storage/logs/laravel.log)
+- For production, configure SMTP in .env file
+- File uploads go to storage/app/public/
+- Run 'php artisan storage:link' if uploads don't work
+
+TROUBLESHOOTING:
+================
+If you get errors:
+1. Clear cache: php artisan cache:clear
+2. Clear config: php artisan config:clear
+3. Recreate database: php artisan migrate:fresh --seed
+4. Check MySQL is running in XAMPP
+
+ENJOY TESTING ORION AI!
