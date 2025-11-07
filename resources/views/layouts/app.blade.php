@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'ORION AI - Learn & Grow')</title>
-    <link rel="icon" type="image/png" href="{{ asset('storage/logo/orion-logo.png') }}">
-    <link rel="shortcut icon" type="image/png" href="{{ asset('storage/logo/orion-logo.png') }}">
     <style>
         * {
             margin: 0;
@@ -573,10 +571,7 @@
     <div class="toast-container" id="toastContainer"></div>
     <nav class="navbar">
         <div class="nav-container">
-            <a href="{{ route('home') }}" class="logo">
-                <img src="{{ asset('storage/logo/orion-logo.png') }}" alt="ORION AI" style="height: 40px; width: auto; margin-right: 8px; vertical-align: middle;">
-                ORION AI
-            </a>
+            <a href="{{ route('home') }}" class="logo">ORION AI</a>
             
             <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
                 <div class="hamburger">
