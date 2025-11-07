@@ -62,6 +62,10 @@ php artisan storage:link || true\n\
 echo "Running migrations..."\n\
 php artisan migrate --force || echo "Migrations failed, continuing..."\n\
 \n\
+# Run seeders (only on first deployment)\n\
+echo "Running seeders..."\n\
+php artisan db:seed --force || echo "Seeders failed, continuing..."\n\
+\n\
 # Start server\n\
 echo "Starting server on port $PORT..."\n\
 php artisan serve --host=0.0.0.0 --port=$PORT\n\
