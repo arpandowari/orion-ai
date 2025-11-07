@@ -8,6 +8,11 @@ use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\LoginController;
 
+// Health check for Railway
+Route::get('/health', function () {
+    return response()->json(['status' => 'ok', 'app' => 'ORION AI'], 200);
+});
+
 // Authentication
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
