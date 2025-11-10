@@ -65,13 +65,25 @@
         .logo {
             font-size: 1.75rem;
             font-weight: 800;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo span {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-decoration: none;
-            letter-spacing: -0.5px;
-            transition: all 0.3s;
+        }
+
+        .logo img {
+            height: 40px;
+            width: auto;
+            display: block;
         }
 
         .logo:hover {
@@ -225,37 +237,48 @@
         .mobile-menu-backdrop {
             display: none;
             position: fixed;
-            top: 70px;
+            top: 0;
             left: 0;
             width: 100%;
-            height: calc(100vh - 70px);
+            height: 100vh;
             background: rgba(0, 0, 0, 0.5);
             z-index: 998;
             opacity: 0;
             transition: opacity 0.3s ease-in-out;
+            pointer-events: none;
         }
 
         .mobile-menu-backdrop.active {
             display: block;
             opacity: 1;
+            pointer-events: auto;
+        }
+
+        @media (max-width: 968px) {
+            .mobile-menu-backdrop {
+                top: 60px;
+                height: calc(100vh - 60px);
+            }
         }
 
         @media (max-width: 968px) {
             .nav-container {
-                padding: 0 1.5rem;
+                padding: 0 1rem;
+                height: 60px;
             }
 
             .mobile-menu-toggle {
                 display: block;
+                z-index: 1001;
             }
 
             .nav-menu {
                 position: fixed;
-                top: 70px;
+                top: 60px;
                 right: -100%;
                 width: 280px;
                 max-width: 85vw;
-                height: calc(100vh - 70px);
+                height: calc(100vh - 60px);
                 background: white;
                 flex-direction: column;
                 padding: 1.5rem 0;
@@ -264,10 +287,12 @@
                 overflow-y: auto;
                 gap: 0;
                 z-index: 999;
+                visibility: hidden;
             }
 
             .nav-menu.active {
                 right: 0;
+                visibility: visible;
             }
 
             .nav-menu li {
@@ -299,28 +324,67 @@
             }
 
             .logo {
-                font-size: 1.4rem;
+                font-size: 1.3rem;
+            }
+
+            .logo img {
+                height: 32px;
+            }
+
+            .navbar {
+                height: 60px;
             }
         }
 
         @media (max-width: 480px) {
             .nav-container {
-                padding: 0 1rem;
-                height: 60px;
+                padding: 0 0.75rem;
+                height: 56px;
+            }
+
+            .navbar {
+                height: 56px;
             }
 
             .logo {
-                font-size: 1.25rem;
+                font-size: 1.2rem;
+            }
+
+            .logo img {
+                height: 28px;
             }
 
             .nav-menu {
-                top: 60px;
-                height: calc(100vh - 60px);
+                top: 56px;
+                height: calc(100vh - 56px);
                 width: 100%;
+                max-width: 100%;
+            }
+
+            .mobile-menu-backdrop {
+                top: 56px;
+                height: calc(100vh - 56px);
             }
 
             .container {
                 padding: 1rem;
+            }
+
+            .hamburger {
+                width: 24px;
+                height: 18px;
+            }
+
+            .hamburger span {
+                height: 2px;
+            }
+
+            .hamburger span:nth-child(2) {
+                top: 7px;
+            }
+
+            .hamburger span:nth-child(3) {
+                top: 14px;
             }
         }
 
@@ -595,9 +659,16 @@
     </div>
 
     <div class="toast-container" id="toastContainer"></div>
+    
+    <!-- Mobile Menu Backdrop -->
+    <div class="mobile-menu-backdrop" id="mobileMenuBackdrop"></div>
+    
     <nav class="navbar">
         <div class="nav-container">
-            <a href="{{ route('home') }}" class="logo">ORION AI</a>
+            <a href="{{ route('home') }}" class="logo" style="display: flex; align-items: center; gap: 8px;">
+                <img src="{{ asset('logo.png') }}" alt="ORION AI" style="height: 40px; width: auto; display: block;" onerror="this.style.display='none'">
+                <span>ORION AI</span>
+            </a>
             
             <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
                 <div class="hamburger">
@@ -745,30 +816,50 @@
         // Mobile Menu Toggle
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');
         const navMenu = document.getElementById('navMenu');
+        const mobileMenuBackdrop = document.getElementById('mobileMenuBackdrop');
+
+        function closeMobileMenu() {
+            mobileMenuToggle.classList.remove('active');
+            navMenu.classList.remove('active');
+            mobileMenuBackdrop.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function openMobileMenu() {
+            mobileMenuToggle.classList.add('active');
+            navMenu.classList.add('active');
+            mobileMenuBackdrop.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
 
         if (mobileMenuToggle) {
-            mobileMenuToggle.addEventListener('click', function() {
-                this.classList.toggle('active');
-                navMenu.classList.toggle('active');
+            mobileMenuToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (navMenu.classList.contains('active')) {
+                    closeMobileMenu();
+                } else {
+                    openMobileMenu();
+                }
             });
+
+            // Close menu when clicking backdrop
+            mobileMenuBackdrop.addEventListener('click', closeMobileMenu);
 
             // Close menu when clicking on a link
             const navLinks = navMenu.querySelectorAll('a');
             navLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileMenuToggle.classList.remove('active');
-                    navMenu.classList.remove('active');
-                });
+                link.addEventListener('click', closeMobileMenu);
             });
 
-            // Close menu when clicking outside
-            document.addEventListener('click', function(event) {
-                const isClickInside = navMenu.contains(event.target) || mobileMenuToggle.contains(event.target);
-                if (!isClickInside && navMenu.classList.contains('active')) {
-                    mobileMenuToggle.classList.remove('active');
-                    navMenu.classList.remove('active');
+            // Close menu on window resize to desktop
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 968 && navMenu.classList.contains('active')) {
+                    closeMobileMenu();
                 }
             });
+
+            // Prevent menu from being open on page load
+            closeMobileMenu();
         }
     </script>
 
