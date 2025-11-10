@@ -221,6 +221,25 @@
             transform: rotate(-135deg);
         }
 
+        /* Mobile Menu Backdrop */
+        .mobile-menu-backdrop {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 70px);
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .mobile-menu-backdrop.active {
+            display: block;
+            opacity: 1;
+        }
+
         @media (max-width: 968px) {
             .nav-container {
                 padding: 0 1.5rem;
@@ -234,15 +253,17 @@
                 position: fixed;
                 top: 70px;
                 right: -100%;
-                width: 300px;
+                width: 280px;
+                max-width: 85vw;
                 height: calc(100vh - 70px);
                 background: white;
                 flex-direction: column;
-                padding: 2rem 0;
-                box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+                padding: 1.5rem 0;
+                box-shadow: -5px 0 20px rgba(0,0,0,0.2);
                 transition: right 0.3s ease-in-out;
                 overflow-y: auto;
                 gap: 0;
+                z-index: 999;
             }
 
             .nav-menu.active {
@@ -256,13 +277,15 @@
             .nav-menu a, .nav-menu button {
                 width: 100%;
                 text-align: left;
-                padding: 1rem 2rem;
+                padding: 1rem 1.5rem;
                 border-radius: 0;
                 justify-content: flex-start;
+                font-size: 1rem;
             }
 
             .nav-menu a.active {
                 border-left: 4px solid var(--secondary);
+                background: rgba(59, 130, 246, 0.1);
             }
 
             .nav-menu form {
@@ -270,13 +293,13 @@
             }
 
             .nav-btn-login, .nav-btn-logout {
-                width: calc(100% - 4rem);
-                margin: 0 2rem;
+                width: calc(100% - 3rem);
+                margin: 0.5rem 1.5rem;
                 text-align: center;
             }
 
             .logo {
-                font-size: 1.5rem;
+                font-size: 1.4rem;
             }
         }
 
