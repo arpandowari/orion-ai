@@ -14,6 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'student.auth' => \App\Http\Middleware\StudentAuth::class,
         ]);
+        
+        // Force HTTPS in production
+        $middleware->append(\App\Http\Middleware\ForceHttps::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
