@@ -624,22 +624,169 @@
             gap: 0.5rem;
         }
 
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: #1e3a8a;
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .mobile-menu-toggle span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: white;
+            margin: 5px 0;
+            transition: 0.3s;
+        }
+
         /* Responsive */
-        @media (max-width: 768px) {
+        @media (max-width: 968px) {
             .sidebar {
                 transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .mobile-menu-toggle {
+                display: block;
             }
 
             .main-content {
                 margin-left: 0;
             }
 
+            .topbar {
+                padding: 1rem 1rem 1rem 4rem;
+                flex-wrap: wrap;
+            }
+
+            .topbar-title {
+                width: 100%;
+                margin-bottom: 1rem;
+            }
+
+            .topbar-title h1 {
+                font-size: 1.25rem;
+            }
+
+            .topbar-actions {
+                width: 100%;
+                display: flex;
+                gap: 0.5rem;
+                flex-wrap: wrap;
+            }
+
+            .topbar-actions .btn {
+                flex: 1;
+                min-width: 140px;
+                font-size: 0.875rem;
+                padding: 0.625rem 1rem;
+                text-align: center;
+            }
+
+            .content-area {
+                padding: 1.5rem 1rem;
+            }
+
             .stats-grid {
                 grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .stat-card {
+                padding: 1.25rem;
+            }
+
+            .stat-value {
+                font-size: 1.75rem;
+            }
+
+            .tabs-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .tabs {
+                min-width: max-content;
+            }
+
+            .tab-btn {
+                white-space: nowrap;
+                font-size: 0.875rem;
+                padding: 0.625rem 1rem;
             }
 
             .search-box {
                 width: 100%;
+                margin-bottom: 0.5rem;
+            }
+
+            .table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            table {
+                min-width: 600px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .topbar {
+                padding: 0.875rem 0.875rem 0.875rem 3.5rem;
+            }
+
+            .topbar-title h1 {
+                font-size: 1.1rem;
+            }
+
+            .topbar-actions .btn {
+                width: 100%;
+                min-width: auto;
+            }
+
+            .content-area {
+                padding: 1rem 0.75rem;
+            }
+
+            .stat-card {
+                padding: 1rem;
+            }
+
+            .stat-title {
+                font-size: 0.8125rem;
+            }
+
+            .stat-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 1.1rem;
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+            }
+
+            .tab-btn {
+                font-size: 0.8125rem;
+                padding: 0.5rem 0.875rem;
+            }
+
+            .sidebar {
+                width: 280px;
             }
         }
         /* Toast Notifications */
@@ -775,6 +922,13 @@
 <body>
     <div class="toast-container" id="toastContainer"></div>
     
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" id="mobileMenuToggle" onclick="toggleSidebar()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    
     <!-- Student Details Modal -->
     <div id="studentModal" class="modal">
         <div class="modal-content">
@@ -789,7 +943,7 @@
     </div>
     
     <!-- Sidebar -->
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-logo">ORION AI</div>
             <div class="sidebar-user">
@@ -1430,6 +1584,24 @@
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeStudentModal();
+            }
+        });
+
+        // Mobile Sidebar Toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.getElementById('mobileMenuToggle');
+            
+            if (window.innerWidth <= 968) {
+                if (!sidebar.contains(event.target) && !toggle.contains(event.target)) {
+                    sidebar.classList.remove('active');
+                }
             }
         });
 

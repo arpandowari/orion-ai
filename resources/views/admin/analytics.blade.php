@@ -304,25 +304,185 @@
             color: #64748b;
         }
 
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: #1e3a8a;
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .mobile-menu-toggle span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: white;
+            margin: 5px 0;
+            transition: 0.3s;
+        }
+
         /* Responsive */
-        @media (max-width: 768px) {
+        @media (max-width: 968px) {
             .sidebar {
                 transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .mobile-menu-toggle {
+                display: block;
             }
 
             .main-content {
                 margin-left: 0;
             }
 
+            .topbar {
+                padding: 1rem 1rem 1rem 4rem;
+            }
+
+            .topbar-title h1 {
+                font-size: 1.25rem;
+            }
+
+            .topbar-actions {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .btn {
+                font-size: 0.8125rem;
+                padding: 0.5rem 1rem;
+            }
+
+            .content-area {
+                padding: 1.5rem 1rem;
+            }
+
             .stats-grid {
                 grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .stat-card {
+                padding: 1.25rem;
+            }
+
+            .stat-value {
+                font-size: 1.75rem;
+            }
+
+            .chart-container {
+                padding: 1.5rem 1rem;
+            }
+
+            .chart-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .chart-title h2 {
+                font-size: 1.25rem;
+            }
+
+            .chart-legend {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .topbar {
+                padding: 0.875rem 0.875rem 0.875rem 3.5rem;
+            }
+
+            .topbar-title h1 {
+                font-size: 1.1rem;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .content-area {
+                padding: 1rem 0.75rem;
+            }
+
+            .stat-card {
+                padding: 1rem;
+            }
+
+            .stat-header {
+                margin-bottom: 0.75rem;
+            }
+
+            .stat-title {
+                font-size: 0.8125rem;
+            }
+
+            .stat-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 1.1rem;
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+            }
+
+            .chart-container {
+                padding: 1rem 0.75rem;
+            }
+
+            .chart-title h2 {
+                font-size: 1.1rem;
+            }
+
+            .chart-title p {
+                font-size: 0.8125rem;
+            }
+
+            .legend-text {
+                font-size: 0.8125rem;
+            }
+
+            .sidebar {
+                width: 280px;
+            }
+
+            .sidebar-header {
+                padding: 1.5rem 1rem;
+            }
+
+            .sidebar-logo {
+                font-size: 1.25rem;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" id="mobileMenuToggle" onclick="toggleSidebar()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
     <!-- Sidebar -->
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-logo">ORION AI</div>
             <div class="sidebar-user">
@@ -451,6 +611,24 @@
     </div>
 
     <script>
+        // Mobile Sidebar Toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.getElementById('mobileMenuToggle');
+            
+            if (window.innerWidth <= 968) {
+                if (!sidebar.contains(event.target) && !toggle.contains(event.target)) {
+                    sidebar.classList.remove('active');
+                }
+            }
+        });
+
         // Analytics Chart
         window.addEventListener('load', function() {
             const ctx = document.getElementById('analyticsChart');
