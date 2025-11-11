@@ -284,6 +284,23 @@
             padding: 0.5rem;
             border-radius: 12px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+        }
+
+        .tabs::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .tabs::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+
+        .tabs::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
         }
 
         .tab {
@@ -296,6 +313,8 @@
             transition: all 0.2s;
             border: none;
             background: none;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .tab:hover {
@@ -714,18 +733,14 @@
                 font-size: 1.75rem;
             }
 
-            .tabs-container {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-
             .tabs {
-                min-width: max-content;
+                gap: 0.375rem;
+                padding: 0.375rem;
+                margin-bottom: 1.5rem;
             }
 
-            .tab-btn {
-                white-space: nowrap;
-                font-size: 0.875rem;
+            .tab {
+                font-size: 0.8125rem;
                 padding: 0.625rem 1rem;
             }
 
@@ -780,9 +795,15 @@
                 font-size: 1.5rem;
             }
 
-            .tab-btn {
-                font-size: 0.8125rem;
-                padding: 0.5rem 0.875rem;
+            .tabs {
+                gap: 0.25rem;
+                padding: 0.25rem;
+                margin-bottom: 1rem;
+            }
+
+            .tab {
+                font-size: 0.75rem;
+                padding: 0.5rem 0.75rem;
             }
 
             .sidebar {
