@@ -126,6 +126,84 @@
         display: block;
         margin-bottom: 0.25rem;
     }
+
+    /* Mobile Responsive Styles */
+    @media (max-width: 968px) {
+        .dashboard-header {
+            padding: 1.5rem;
+        }
+
+        .dashboard-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .tabs {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .tab-btn {
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Make table scrollable on mobile */
+        .data-table {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            min-width: 800px;
+            font-size: 0.875rem;
+        }
+
+        th, td {
+            padding: 0.75rem 0.5rem;
+        }
+
+        .action-btns {
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .btn-sm {
+            width: 100%;
+            text-align: center;
+        }
+
+        .details-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .dashboard-header {
+            padding: 1rem;
+        }
+
+        .dashboard-header h1 {
+            font-size: 1.25rem;
+        }
+
+        .dashboard-header p {
+            font-size: 0.875rem;
+        }
+
+        table {
+            min-width: 600px;
+            font-size: 0.8125rem;
+        }
+
+        th, td {
+            padding: 0.5rem 0.25rem;
+        }
+
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+        }
+    }
 </style>
 @endsection
 

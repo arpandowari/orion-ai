@@ -312,7 +312,11 @@
     }
 
     /* Responsive */
-    @media (max-width: 768px) {
+    @media (max-width: 968px) {
+        .hero-section {
+            padding: 4rem 1.5rem;
+        }
+
         .hero-content h1 {
             font-size: 2.5rem;
         }
@@ -321,12 +325,26 @@
             font-size: 1.1rem;
         }
 
+        .hero-cta {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+
+        .main-container {
+            padding: 2rem 1.5rem;
+        }
+
         .section-header h2 {
             font-size: 2rem;
         }
 
         .courses-grid {
             grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .placement-card {
+            padding: 2rem;
         }
 
         .placement-buttons {
@@ -336,6 +354,11 @@
         .placement-buttons a {
             width: 100%;
         }
+
+        .companies-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
     }
 
     @media (max-width: 480px) {
@@ -344,15 +367,74 @@
         }
 
         .hero-content h1 {
-            font-size: 2rem;
+            font-size: 1.75rem;
+            line-height: 1.3;
+        }
+
+        .hero-content p {
+            font-size: 1rem;
+        }
+
+        .hero-cta {
+            padding: 0.875rem 1.75rem;
+            font-size: 1rem;
         }
 
         .main-container {
-            padding: 2rem 1rem;
+            padding: 1.5rem 1rem;
+        }
+
+        .section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .section-header p {
+            font-size: 0.95rem;
         }
 
         .placement-card {
-            padding: 2rem 1.5rem;
+            padding: 1.5rem 1rem;
+        }
+
+        .placement-card h3 {
+            font-size: 1.5rem;
+        }
+
+        .placement-card p {
+            font-size: 1rem;
+        }
+
+        .btn-explore, .btn-enroll {
+            padding: 0.875rem 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .course-content {
+            padding: 1.5rem;
+        }
+
+        .course-content h3 {
+            font-size: 1.25rem;
+        }
+
+        .course-actions {
+            flex-direction: column;
+        }
+
+        .companies-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .company-item {
+            padding: 1.5rem;
         }
     }
 </style>

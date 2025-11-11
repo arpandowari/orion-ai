@@ -224,15 +224,75 @@
             margin-top: 4rem;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 968px) {
+            .nav-container {
+                padding: 0 1rem;
+                flex-wrap: wrap;
+            }
+
+            .nav-menu {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                font-size: 0.875rem;
+            }
+
+            .nav-menu a {
+                padding: 0.5rem 0.75rem;
+            }
+
             .admin-layout {
                 flex-direction: column;
+                gap: 1rem;
             }
 
             .sidebar {
                 width: 100%;
                 position: relative;
                 top: 0;
+                max-height: none;
+                margin-bottom: 1rem;
+            }
+
+            .main-content {
+                width: 100%;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 0.75rem 0;
+            }
+
+            .logo {
+                font-size: 1.1rem;
+            }
+
+            .nav-menu {
+                flex-direction: column;
+                width: 100%;
+                gap: 0.25rem;
+            }
+
+            .nav-menu a {
+                width: 100%;
+                text-align: center;
+            }
+
+            .sidebar {
+                padding: 1rem;
+            }
+
+            .sidebar-menu a {
+                padding: 0.6rem 0.75rem;
+                font-size: 0.9rem;
+            }
+
+            .container {
+                padding: 0.75rem;
             }
         }
         /* Toast Notifications */
