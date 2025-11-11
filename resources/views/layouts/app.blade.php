@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#1e3a8a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>@yield('title', 'ORION AI - Learn & Grow')</title>
     <link rel="icon" type="image/png" href="{{ asset('logo.png') }}">
     <link rel="shortcut icon" type="image/png" href="{{ asset('favicon.png') }}">
@@ -39,6 +43,14 @@
             line-height: 1.6;
             color: var(--dark);
             background: var(--light);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        /* Prevent horizontal scroll */
+        html {
+            overflow-x: hidden;
         }
 
         .navbar {
@@ -393,18 +405,32 @@
             margin: 0 auto;
             padding: 2rem;
             width: 100%;
+            box-sizing: border-box;
         }
 
         @media (max-width: 768px) {
             .container {
                 padding: 1.5rem 1rem;
+                max-width: 100%;
             }
         }
 
         @media (max-width: 480px) {
             .container {
-                padding: 1rem;
+                padding: 1rem 0.75rem;
+                max-width: 100%;
             }
+        }
+
+        /* Ensure all content boxes are responsive */
+        * {
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
         }
 
         .btn {
