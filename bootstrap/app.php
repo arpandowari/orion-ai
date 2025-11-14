@@ -15,8 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'student.auth' => \App\Http\Middleware\StudentAuth::class,
         ]);
         
-        // Force HTTPS in production
-        $middleware->append(\App\Http\Middleware\ForceHttps::class);
+        // Force HTTPS in production - DISABLED FOR LOCAL DEVELOPMENT
+        // Uncomment for production deployment:
+        // $middleware->append(\App\Http\Middleware\ForceHttps::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
